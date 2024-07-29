@@ -55,7 +55,7 @@ func (ex *ExcelBuilder) getDataPenetapanTujuan(year int) ([]DataPenetapanTujuan,
 	return data, nil
 }
 
-func (ex *ExcelBuilder) setPenetapanTujuanHeader(f *excelize.File, period int) {
+func (ex *ExcelBuilder) createPenetapanTujuanHeader(f *excelize.File, period int) {
 	f.SetCellValue(SheetPenetapantujuan, SheetHeaderPenetapanTujuan_ValueRangeStart, SheetHeaderPenetapanTujuan)
 	f.MergeCell(SheetPenetapantujuan, SheetHeaderPenetapanTujuan_ValueRangeStart, SheetHeaderPenetapanTujuan_ValueRangeEnd)
 
@@ -91,7 +91,7 @@ func (ex *ExcelBuilder) setPenetapanTujuanHeader(f *excelize.File, period int) {
 
 }
 
-func (ex *ExcelBuilder) setPenetapanTujuanTable(f *excelize.File) {
+func (ex *ExcelBuilder) createPenetapanTujuanTable(f *excelize.File) {
 
 	style, _ := f.NewStyle(&excelize.Style{
 		Fill: excelize.Fill{Type: "gradient", Color: []string{"95b3d7", "95b3d7"}, Shading: 1},
@@ -126,7 +126,7 @@ func (ex *ExcelBuilder) setPenetapanTujuanTable(f *excelize.File) {
 
 }
 
-func (ex *ExcelBuilder) fillPenetapanTujuan(f *excelize.File, report Report) {
+func (ex *ExcelBuilder) fillPenetapanTujuanData(f *excelize.File, report Report) {
 
 	// Data Start from this row
 	startRowNum := SheetPenetapanTujuan_RowStart
@@ -226,5 +226,5 @@ func (ex *ExcelBuilder) fillPenetapanTujuan(f *excelize.File, report Report) {
 		log.Fatal(err)
 	}
 
-	ex.signPlaceholder(f, startRowNum+3)
+	ex.signPlaceholder(f, SheetPenetapantujuan, startRowNum+3)
 }

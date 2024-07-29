@@ -5,18 +5,18 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-func (ex *ExcelBuilder) signPlaceholder(f *excelize.File, rowNumberStart int) {
+func (ex *ExcelBuilder) signPlaceholder(f *excelize.File, sheet string, rowNumberStart int) {
 	dateCell := fmt.Sprintf("E%d", rowNumberStart)
 
 	// Date cell
-	f.SetCellValue(SheetPenetapantujuan, dateCell, "Jakarta, <Date here>")
+	f.SetCellValue(sheet, dateCell, "Jakarta, <Date here>")
 	// Signer Role cell
 	signerRoleCell := fmt.Sprintf("E%d", rowNumberStart+1)
-	f.SetCellValue(SheetPenetapantujuan, signerRoleCell, "Kepala Badan Pembinaan Hukum Nasional")
+	f.SetCellValue(sheet, signerRoleCell, "Kepala Badan Pembinaan Hukum Nasional")
 	// Signer Name cell
 	signerNameCell := fmt.Sprintf("E%d", rowNumberStart+6)
-	f.SetCellValue(SheetPenetapantujuan, signerNameCell, "<Name here>")
+	f.SetCellValue(sheet, signerNameCell, "<Name here>")
 	// Employee ID cell
 	signerIDCell := fmt.Sprintf("E%d", rowNumberStart+7)
-	f.SetCellValue(SheetPenetapantujuan, signerIDCell, "NIP.<NIP here>")
+	f.SetCellValue(sheet, signerIDCell, "NIP.<NIP here>")
 }

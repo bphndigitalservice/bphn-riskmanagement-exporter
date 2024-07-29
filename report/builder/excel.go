@@ -9,11 +9,11 @@ import (
 
 var sheets []string = []string{
 	SheetIdentifikasirisiko,
-	SheetKriteriadanskala,
-	SheetAnalisisrisiko,
-	SheetEvaluasirisiko,
-	SheetPenangananrisiko,
-	SheetPemantauanrisiko,
+	SheetKriteriaDanSkala,
+	SheetAnalisisRisiko,
+	SheetEvaluasiRisiko,
+	SheetPenangananRisiko,
+	SheetPemantauanRisiko,
 }
 
 type ExcelBuilder struct {
@@ -35,23 +35,49 @@ func (ex *ExcelBuilder) Export(year int) (*excelize.File, error) {
 		}
 	}()
 
-	data, err := ex.getDataPenetapanTujuan(year)
+	dataPenetapanTujuan, err := ex.getDataPenetapanTujuan(year)
 	if err != nil {
-		log.Printf("tai %v", err.Error())
+		log.Printf("Error %v", err.Error())
 		return nil, err
 	}
 
+	dataIdentifikasiRisiko, err := ex.getDataIdentifikasiRisiko(year)
+	if err != nil {
+		log.Printf("Error %v", err.Error())
+		return nil, err
+	}
+
+	dataAnalisisRisiko, err := ex.getDataAnalisisRisiko(year)
+	if err != nil {
+		log.Printf("Error %v", err.Error())
+	}
+
 	builder := Report{
-		SheetPenetapanTujuan: data,
-		Period:               uint64(year),
+		SheetPenetapanTujuan:    dataPenetapanTujuan,
+		SheetIdentifikasiRisiko: dataIdentifikasiRisiko,
+		SheetAnalisisRisiko:     dataAnalisisRisiko,
+		Period:                  uint64(year),
 	}
 
 	ex.prepareSheets(f)
 
 	// 1. Penetapan Tujuan
-	ex.setPenetapanTujuanHeader(f, year)
-	ex.setPenetapanTujuanTable(f)
-	ex.fillPenetapanTujuan(f, builder)
+	ex.createPenetapanTujuanHeader(f, year)
+	ex.createPenetapanTujuanTable(f)
+	ex.fillPenetapanTujuanData(f, builder)
+
+	// 2. Identifikasi Risiko
+	ex.createIdentifikasiRisikoHeader(f, year)
+	ex.createIdentifikasiRisikoTable(f)
+	ex.fillIdentifikasiRisikoData(f, builder)
+
+	// 3. Kriteria dan Skala
+	ex.fillKriteriaDanSkala(f)
+
+	// 4. Analisis Risiko
+	ex.createAnalisisRisikoHeader(f, year)
+	ex.createAnalisisRisikoTable(f)
+	ex.fillAnalisisRisikoData(f, builder)
 
 	// Save spreadsheet by the given path.
 	if err := f.SaveAs("Manajemen Risiko_Export.xlsx"); err != nil {
