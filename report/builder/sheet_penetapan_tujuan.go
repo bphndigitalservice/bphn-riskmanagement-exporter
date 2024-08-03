@@ -226,5 +226,5 @@ func (ex *ExcelBuilder) fillPenetapanTujuanData(f *excelize.File, report Report)
 		log.Fatal(err)
 	}
 
-	ex.signPlaceholder(f, SheetPenetapantujuan, startRowNum+3)
+	ex.signPlaceholder(f, SheetPenetapantujuan, startRowNum+3, "E")
 }

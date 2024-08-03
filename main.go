@@ -19,6 +19,7 @@ func main() {
 	}
 
 	DATABASE_URL := os.Getenv("DATABASE_URL")
+	PORT := os.Getenv("PORT")
 
 	db, err := sql.Open("mysql", DATABASE_URL)
 	if err != nil {
@@ -29,7 +30,7 @@ func main() {
 	excelBuilder := builder.NewExcelBuilder(repo)
 	handler := server.NewHandler(excelBuilder)
 
-	httpServer := server.NewHttpServer("", "8443", handler)
+	httpServer := server.NewHttpServer("0.0.0.0", PORT, handler)
 	err = httpServer.Start()
 	if err != nil {
 		log.Fatal(err)

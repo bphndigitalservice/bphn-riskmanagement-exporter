@@ -15,6 +15,9 @@ type RiskRepository interface {
 	GetProblemsByYear(year int) ([]Problem, error)
 	GetRisksByProblem(problem uint64) ([]Risk, error)
 	GetRiskAnalysisByYear(year int) ([]Risk, error)
+	GetRiskEvaluationByYear(year int) ([]Risk, error)
+	GetRiskTreatmentByYear(year int) ([]Risk, error)
+	GetRiskMonitoringByYear(year int) ([]Risk, error)
 }
 
 type riskRepository struct {
@@ -400,6 +403,630 @@ func (receiver *riskRepository) GetRiskAnalysisByYear(year int) ([]Risk, error) 
          left join master_sasaran on master_indikator.id_sasaran = master_sasaran.id_sasaran
          left join master_strategi on master_strategi.id_strategi = master_sasaran.id_strategi
          where master_strategi.tahun = ? and manajemen_risiko.sisa_risiko is not null ORDER BY master_strategi.id_strategi,master_sasaran.id_sasaran,master_indikator.id_indikator,master_permasalahan.id_permasalahan, manajemen_risiko.id_risiko`
+
+	rows, err := receiver.db.Query(query, year)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var risks []Risk
+
+	for rows.Next() {
+		var mr Risk
+		var (
+			idPermasalahan           sql.NullInt32
+			tahun                    sql.NullInt32
+			penyebabUraian           sql.NullString
+			penyebabSumber           sql.NullString
+			penyebabCUC              sql.NullString
+			dampakUraianDaftarRisiko sql.NullString
+			dampakPihakDaftarRisiko  sql.NullString
+			pengendalianIntern       sql.NullString
+			sisaRisiko               sql.NullString
+			kriteriaRisiko           sql.NullString
+			kemungkinanUraian        sql.NullString
+			kemungkinanNilai         sql.NullInt32
+			alasan                   sql.NullString
+			dampakUraianPetaRisiko   sql.NullString
+			nilaiPetaRisiko          sql.NullInt32
+			prioritasRisiko          sql.NullString
+			toleransiRisiko          sql.NullInt32
+			indikasiIndikator        sql.NullString
+			penjelasanIndikator      sql.NullString
+			batasAmanIndikator       sql.NullString
+			opsiPenanganan           sql.NullString
+			kegiatanPengendalian     sql.NullString
+			outputIndikator          sql.NullString
+			targetIndikator          sql.NullString
+			jadwal                   sql.NullString
+			penanggungJawab          sql.NullString
+			cadanganRisiko           sql.NullString
+			realisasiPengendalian    sql.NullString
+			realisasiRisiko          sql.NullString
+			risikoResidu             sql.NullString
+			progress                 sql.NullString
+			tglPost                  sql.NullTime
+			idUserPost               sql.NullInt32
+		)
+
+		err := rows.Scan(
+			&mr.IdRisiko,
+			&idPermasalahan,
+			&tahun,
+			&mr.RisikoPernyataan,
+			&penyebabUraian,
+			&penyebabSumber,
+			&penyebabCUC,
+			&dampakUraianDaftarRisiko,
+			&dampakPihakDaftarRisiko,
+			&pengendalianIntern,
+			&sisaRisiko,
+			&kriteriaRisiko,
+			&kemungkinanUraian,
+			&kemungkinanNilai,
+			&alasan,
+			&dampakUraianPetaRisiko,
+			&nilaiPetaRisiko,
+			&prioritasRisiko,
+			&toleransiRisiko,
+			&indikasiIndikator,
+			&penjelasanIndikator,
+			&batasAmanIndikator,
+			&opsiPenanganan,
+			&kegiatanPengendalian,
+			&outputIndikator,
+			&targetIndikator,
+			&jadwal,
+			&penanggungJawab,
+			&cadanganRisiko,
+			&realisasiPengendalian,
+			&realisasiRisiko,
+			&risikoResidu,
+			&progress,
+			&tglPost,
+			&idUserPost,
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Convert nullable fields to pointers
+		if idPermasalahan.Valid {
+			mr.IdPermasalahan = int(idPermasalahan.Int32)
+		}
+		if tahun.Valid {
+			mr.Tahun = int(tahun.Int32)
+		}
+		if penyebabUraian.Valid {
+			mr.PenyebabUraian = penyebabUraian.String
+		}
+		if penyebabSumber.Valid {
+			mr.PenyebabSumber = penyebabSumber.String
+		}
+		if penyebabCUC.Valid {
+			mr.PenyebabCUC = penyebabCUC.String
+		}
+		if dampakUraianDaftarRisiko.Valid {
+			mr.DampakUraianDaftarRisiko = dampakUraianDaftarRisiko.String
+		}
+		if dampakPihakDaftarRisiko.Valid {
+			mr.DampakPihakDaftarRisiko = dampakPihakDaftarRisiko.String
+		}
+		if pengendalianIntern.Valid {
+			mr.PengendalianIntern = pengendalianIntern.String
+		}
+		if sisaRisiko.Valid {
+			mr.SisaRisiko = sisaRisiko.String
+		}
+		if kriteriaRisiko.Valid {
+			mr.KriteriaRisiko = kriteriaRisiko.String
+		}
+		if kemungkinanUraian.Valid {
+			mr.KemungkinanUraian = kemungkinanUraian.String
+		}
+		if kemungkinanNilai.Valid {
+			mr.KemungkinanNilai = int(kemungkinanNilai.Int32)
+		}
+		if alasan.Valid {
+			mr.Alasan = alasan.String
+		}
+		if dampakUraianPetaRisiko.Valid {
+			mr.DampakUraianPetaRisiko = dampakUraianPetaRisiko.String
+		}
+		if nilaiPetaRisiko.Valid {
+			mr.NilaiPetaRisiko = int(nilaiPetaRisiko.Int32)
+		}
+		if prioritasRisiko.Valid {
+			mr.PrioritasRisiko = prioritasRisiko.String
+		}
+		if toleransiRisiko.Valid {
+			mr.ToleransiRisiko = int(toleransiRisiko.Int32)
+		}
+		if indikasiIndikator.Valid {
+			mr.IndikasiIndikator = indikasiIndikator.String
+		}
+		if penjelasanIndikator.Valid {
+			mr.PenjelasanIndikator = penjelasanIndikator.String
+		}
+		if batasAmanIndikator.Valid {
+			mr.BatasAmanIndikator = batasAmanIndikator.String
+		}
+		if opsiPenanganan.Valid {
+			mr.OpsiPenanganan = opsiPenanganan.String
+		}
+		if kegiatanPengendalian.Valid {
+			mr.KegiatanPengendalian = kegiatanPengendalian.String
+		}
+		if outputIndikator.Valid {
+			mr.OutputIndikator = outputIndikator.String
+		}
+		if targetIndikator.Valid {
+			mr.TargetIndikator = targetIndikator.String
+		}
+		if jadwal.Valid {
+			mr.Jadwal = jadwal.String
+		}
+		if penanggungJawab.Valid {
+			mr.PenanggungJawab = penanggungJawab.String
+		}
+		if cadanganRisiko.Valid {
+			mr.CadanganRisiko = cadanganRisiko.String
+		}
+		if realisasiPengendalian.Valid {
+			mr.RealisasiPengendalian = realisasiPengendalian.String
+		}
+		if realisasiRisiko.Valid {
+			mr.RealisasiRisiko = realisasiRisiko.String
+		}
+		if risikoResidu.Valid {
+			mr.RisikoResidu = risikoResidu.String
+		}
+		if progress.Valid {
+			mr.Progress = progress.String
+		}
+		if tglPost.Valid {
+			mr.TglPost = tglPost.Time
+		}
+		if idUserPost.Valid {
+			mr.IdUserPost = int(idUserPost.Int32)
+		}
+
+		risks = append(risks, mr)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	return risks, nil
+}
+
+func (receiver *riskRepository) GetRiskEvaluationByYear(year int) ([]Risk, error) {
+	query := `select manajemen_risiko.* from manajemen_risiko
+         left join master_permasalahan on master_permasalahan.id_permasalahan = manajemen_risiko.id_permasalahan
+         left join master_indikator on master_indikator.id_indikator = master_permasalahan.id_indikator
+         left join master_sasaran on master_indikator.id_sasaran = master_sasaran.id_sasaran
+         left join master_strategi on master_strategi.id_strategi = master_sasaran.id_strategi
+         where master_strategi.tahun = ? and manajemen_risiko.dampak_uraian_peta_risiko is not NULL ORDER BY master_strategi.id_strategi,master_sasaran.id_sasaran,master_indikator.id_indikator,master_permasalahan.id_permasalahan, manajemen_risiko.id_risiko`
+
+	rows, err := receiver.db.Query(query, year)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var risks []Risk
+
+	for rows.Next() {
+		var mr Risk
+		var (
+			idPermasalahan           sql.NullInt32
+			tahun                    sql.NullInt32
+			penyebabUraian           sql.NullString
+			penyebabSumber           sql.NullString
+			penyebabCUC              sql.NullString
+			dampakUraianDaftarRisiko sql.NullString
+			dampakPihakDaftarRisiko  sql.NullString
+			pengendalianIntern       sql.NullString
+			sisaRisiko               sql.NullString
+			kriteriaRisiko           sql.NullString
+			kemungkinanUraian        sql.NullString
+			kemungkinanNilai         sql.NullInt32
+			alasan                   sql.NullString
+			dampakUraianPetaRisiko   sql.NullString
+			nilaiPetaRisiko          sql.NullInt32
+			prioritasRisiko          sql.NullString
+			toleransiRisiko          sql.NullInt32
+			indikasiIndikator        sql.NullString
+			penjelasanIndikator      sql.NullString
+			batasAmanIndikator       sql.NullString
+			opsiPenanganan           sql.NullString
+			kegiatanPengendalian     sql.NullString
+			outputIndikator          sql.NullString
+			targetIndikator          sql.NullString
+			jadwal                   sql.NullString
+			penanggungJawab          sql.NullString
+			cadanganRisiko           sql.NullString
+			realisasiPengendalian    sql.NullString
+			realisasiRisiko          sql.NullString
+			risikoResidu             sql.NullString
+			progress                 sql.NullString
+			tglPost                  sql.NullTime
+			idUserPost               sql.NullInt32
+		)
+
+		err := rows.Scan(
+			&mr.IdRisiko,
+			&idPermasalahan,
+			&tahun,
+			&mr.RisikoPernyataan,
+			&penyebabUraian,
+			&penyebabSumber,
+			&penyebabCUC,
+			&dampakUraianDaftarRisiko,
+			&dampakPihakDaftarRisiko,
+			&pengendalianIntern,
+			&sisaRisiko,
+			&kriteriaRisiko,
+			&kemungkinanUraian,
+			&kemungkinanNilai,
+			&alasan,
+			&dampakUraianPetaRisiko,
+			&nilaiPetaRisiko,
+			&prioritasRisiko,
+			&toleransiRisiko,
+			&indikasiIndikator,
+			&penjelasanIndikator,
+			&batasAmanIndikator,
+			&opsiPenanganan,
+			&kegiatanPengendalian,
+			&outputIndikator,
+			&targetIndikator,
+			&jadwal,
+			&penanggungJawab,
+			&cadanganRisiko,
+			&realisasiPengendalian,
+			&realisasiRisiko,
+			&risikoResidu,
+			&progress,
+			&tglPost,
+			&idUserPost,
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Convert nullable fields to pointers
+		if idPermasalahan.Valid {
+			mr.IdPermasalahan = int(idPermasalahan.Int32)
+		}
+		if tahun.Valid {
+			mr.Tahun = int(tahun.Int32)
+		}
+		if penyebabUraian.Valid {
+			mr.PenyebabUraian = penyebabUraian.String
+		}
+		if penyebabSumber.Valid {
+			mr.PenyebabSumber = penyebabSumber.String
+		}
+		if penyebabCUC.Valid {
+			mr.PenyebabCUC = penyebabCUC.String
+		}
+		if dampakUraianDaftarRisiko.Valid {
+			mr.DampakUraianDaftarRisiko = dampakUraianDaftarRisiko.String
+		}
+		if dampakPihakDaftarRisiko.Valid {
+			mr.DampakPihakDaftarRisiko = dampakPihakDaftarRisiko.String
+		}
+		if pengendalianIntern.Valid {
+			mr.PengendalianIntern = pengendalianIntern.String
+		}
+		if sisaRisiko.Valid {
+			mr.SisaRisiko = sisaRisiko.String
+		}
+		if kriteriaRisiko.Valid {
+			mr.KriteriaRisiko = kriteriaRisiko.String
+		}
+		if kemungkinanUraian.Valid {
+			mr.KemungkinanUraian = kemungkinanUraian.String
+		}
+		if kemungkinanNilai.Valid {
+			mr.KemungkinanNilai = int(kemungkinanNilai.Int32)
+		}
+		if alasan.Valid {
+			mr.Alasan = alasan.String
+		}
+		if dampakUraianPetaRisiko.Valid {
+			mr.DampakUraianPetaRisiko = dampakUraianPetaRisiko.String
+		}
+		if nilaiPetaRisiko.Valid {
+			mr.NilaiPetaRisiko = int(nilaiPetaRisiko.Int32)
+		}
+		if prioritasRisiko.Valid {
+			mr.PrioritasRisiko = prioritasRisiko.String
+		}
+		if toleransiRisiko.Valid {
+			mr.ToleransiRisiko = int(toleransiRisiko.Int32)
+		}
+		if indikasiIndikator.Valid {
+			mr.IndikasiIndikator = indikasiIndikator.String
+		}
+		if penjelasanIndikator.Valid {
+			mr.PenjelasanIndikator = penjelasanIndikator.String
+		}
+		if batasAmanIndikator.Valid {
+			mr.BatasAmanIndikator = batasAmanIndikator.String
+		}
+		if opsiPenanganan.Valid {
+			mr.OpsiPenanganan = opsiPenanganan.String
+		}
+		if kegiatanPengendalian.Valid {
+			mr.KegiatanPengendalian = kegiatanPengendalian.String
+		}
+		if outputIndikator.Valid {
+			mr.OutputIndikator = outputIndikator.String
+		}
+		if targetIndikator.Valid {
+			mr.TargetIndikator = targetIndikator.String
+		}
+		if jadwal.Valid {
+			mr.Jadwal = jadwal.String
+		}
+		if penanggungJawab.Valid {
+			mr.PenanggungJawab = penanggungJawab.String
+		}
+		if cadanganRisiko.Valid {
+			mr.CadanganRisiko = cadanganRisiko.String
+		}
+		if realisasiPengendalian.Valid {
+			mr.RealisasiPengendalian = realisasiPengendalian.String
+		}
+		if realisasiRisiko.Valid {
+			mr.RealisasiRisiko = realisasiRisiko.String
+		}
+		if risikoResidu.Valid {
+			mr.RisikoResidu = risikoResidu.String
+		}
+		if progress.Valid {
+			mr.Progress = progress.String
+		}
+		if tglPost.Valid {
+			mr.TglPost = tglPost.Time
+		}
+		if idUserPost.Valid {
+			mr.IdUserPost = int(idUserPost.Int32)
+		}
+
+		risks = append(risks, mr)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	return risks, nil
+}
+
+func (receiver *riskRepository) GetRiskTreatmentByYear(year int) ([]Risk, error) {
+	query := `select manajemen_risiko.* from manajemen_risiko
+         left join master_permasalahan on master_permasalahan.id_permasalahan = manajemen_risiko.id_permasalahan
+         left join master_indikator on master_indikator.id_indikator = master_permasalahan.id_indikator
+         left join master_sasaran on master_indikator.id_sasaran = master_sasaran.id_sasaran
+         left join master_strategi on master_strategi.id_strategi = master_sasaran.id_strategi
+         where master_strategi.tahun = ? and manajemen_risiko.indikasi_indikator is not NULL ORDER BY master_strategi.id_strategi,master_sasaran.id_sasaran,master_indikator.id_indikator,master_permasalahan.id_permasalahan, manajemen_risiko.id_risiko`
+
+	rows, err := receiver.db.Query(query, year)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var risks []Risk
+
+	for rows.Next() {
+		var mr Risk
+		var (
+			idPermasalahan           sql.NullInt32
+			tahun                    sql.NullInt32
+			penyebabUraian           sql.NullString
+			penyebabSumber           sql.NullString
+			penyebabCUC              sql.NullString
+			dampakUraianDaftarRisiko sql.NullString
+			dampakPihakDaftarRisiko  sql.NullString
+			pengendalianIntern       sql.NullString
+			sisaRisiko               sql.NullString
+			kriteriaRisiko           sql.NullString
+			kemungkinanUraian        sql.NullString
+			kemungkinanNilai         sql.NullInt32
+			alasan                   sql.NullString
+			dampakUraianPetaRisiko   sql.NullString
+			nilaiPetaRisiko          sql.NullInt32
+			prioritasRisiko          sql.NullString
+			toleransiRisiko          sql.NullInt32
+			indikasiIndikator        sql.NullString
+			penjelasanIndikator      sql.NullString
+			batasAmanIndikator       sql.NullString
+			opsiPenanganan           sql.NullString
+			kegiatanPengendalian     sql.NullString
+			outputIndikator          sql.NullString
+			targetIndikator          sql.NullString
+			jadwal                   sql.NullString
+			penanggungJawab          sql.NullString
+			cadanganRisiko           sql.NullString
+			realisasiPengendalian    sql.NullString
+			realisasiRisiko          sql.NullString
+			risikoResidu             sql.NullString
+			progress                 sql.NullString
+			tglPost                  sql.NullTime
+			idUserPost               sql.NullInt32
+		)
+
+		err := rows.Scan(
+			&mr.IdRisiko,
+			&idPermasalahan,
+			&tahun,
+			&mr.RisikoPernyataan,
+			&penyebabUraian,
+			&penyebabSumber,
+			&penyebabCUC,
+			&dampakUraianDaftarRisiko,
+			&dampakPihakDaftarRisiko,
+			&pengendalianIntern,
+			&sisaRisiko,
+			&kriteriaRisiko,
+			&kemungkinanUraian,
+			&kemungkinanNilai,
+			&alasan,
+			&dampakUraianPetaRisiko,
+			&nilaiPetaRisiko,
+			&prioritasRisiko,
+			&toleransiRisiko,
+			&indikasiIndikator,
+			&penjelasanIndikator,
+			&batasAmanIndikator,
+			&opsiPenanganan,
+			&kegiatanPengendalian,
+			&outputIndikator,
+			&targetIndikator,
+			&jadwal,
+			&penanggungJawab,
+			&cadanganRisiko,
+			&realisasiPengendalian,
+			&realisasiRisiko,
+			&risikoResidu,
+			&progress,
+			&tglPost,
+			&idUserPost,
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Convert nullable fields to pointers
+		if idPermasalahan.Valid {
+			mr.IdPermasalahan = int(idPermasalahan.Int32)
+		}
+		if tahun.Valid {
+			mr.Tahun = int(tahun.Int32)
+		}
+		if penyebabUraian.Valid {
+			mr.PenyebabUraian = penyebabUraian.String
+		}
+		if penyebabSumber.Valid {
+			mr.PenyebabSumber = penyebabSumber.String
+		}
+		if penyebabCUC.Valid {
+			mr.PenyebabCUC = penyebabCUC.String
+		}
+		if dampakUraianDaftarRisiko.Valid {
+			mr.DampakUraianDaftarRisiko = dampakUraianDaftarRisiko.String
+		}
+		if dampakPihakDaftarRisiko.Valid {
+			mr.DampakPihakDaftarRisiko = dampakPihakDaftarRisiko.String
+		}
+		if pengendalianIntern.Valid {
+			mr.PengendalianIntern = pengendalianIntern.String
+		}
+		if sisaRisiko.Valid {
+			mr.SisaRisiko = sisaRisiko.String
+		}
+		if kriteriaRisiko.Valid {
+			mr.KriteriaRisiko = kriteriaRisiko.String
+		}
+		if kemungkinanUraian.Valid {
+			mr.KemungkinanUraian = kemungkinanUraian.String
+		}
+		if kemungkinanNilai.Valid {
+			mr.KemungkinanNilai = int(kemungkinanNilai.Int32)
+		}
+		if alasan.Valid {
+			mr.Alasan = alasan.String
+		}
+		if dampakUraianPetaRisiko.Valid {
+			mr.DampakUraianPetaRisiko = dampakUraianPetaRisiko.String
+		}
+		if nilaiPetaRisiko.Valid {
+			mr.NilaiPetaRisiko = int(nilaiPetaRisiko.Int32)
+		}
+		if prioritasRisiko.Valid {
+			mr.PrioritasRisiko = prioritasRisiko.String
+		}
+		if toleransiRisiko.Valid {
+			mr.ToleransiRisiko = int(toleransiRisiko.Int32)
+		}
+		if indikasiIndikator.Valid {
+			mr.IndikasiIndikator = indikasiIndikator.String
+		}
+		if penjelasanIndikator.Valid {
+			mr.PenjelasanIndikator = penjelasanIndikator.String
+		}
+		if batasAmanIndikator.Valid {
+			mr.BatasAmanIndikator = batasAmanIndikator.String
+		}
+		if opsiPenanganan.Valid {
+			mr.OpsiPenanganan = opsiPenanganan.String
+		}
+		if kegiatanPengendalian.Valid {
+			mr.KegiatanPengendalian = kegiatanPengendalian.String
+		}
+		if outputIndikator.Valid {
+			mr.OutputIndikator = outputIndikator.String
+		}
+		if targetIndikator.Valid {
+			mr.TargetIndikator = targetIndikator.String
+		}
+		if jadwal.Valid {
+			mr.Jadwal = jadwal.String
+		}
+		if penanggungJawab.Valid {
+			mr.PenanggungJawab = penanggungJawab.String
+		}
+		if cadanganRisiko.Valid {
+			mr.CadanganRisiko = cadanganRisiko.String
+		}
+		if realisasiPengendalian.Valid {
+			mr.RealisasiPengendalian = realisasiPengendalian.String
+		}
+		if realisasiRisiko.Valid {
+			mr.RealisasiRisiko = realisasiRisiko.String
+		}
+		if risikoResidu.Valid {
+			mr.RisikoResidu = risikoResidu.String
+		}
+		if progress.Valid {
+			mr.Progress = progress.String
+		}
+		if tglPost.Valid {
+			mr.TglPost = tglPost.Time
+		}
+		if idUserPost.Valid {
+			mr.IdUserPost = int(idUserPost.Int32)
+		}
+
+		risks = append(risks, mr)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	return risks, nil
+}
+
+func (receiver *riskRepository) GetRiskMonitoringByYear(year int) ([]Risk, error) {
+	query := `select manajemen_risiko.* from manajemen_risiko
+         left join master_permasalahan on master_permasalahan.id_permasalahan = manajemen_risiko.id_permasalahan
+         left join master_indikator on master_indikator.id_indikator = master_permasalahan.id_indikator
+         left join master_sasaran on master_indikator.id_sasaran = master_sasaran.id_sasaran
+         left join master_strategi on master_strategi.id_strategi = master_sasaran.id_strategi
+         where master_strategi.tahun = ? and manajemen_risiko.cadangan_risiko is not NULL ORDER BY master_strategi.id_strategi,master_sasaran.id_sasaran,master_indikator.id_indikator,master_permasalahan.id_permasalahan, manajemen_risiko.id_risiko`
 
 	rows, err := receiver.db.Query(query, year)
 

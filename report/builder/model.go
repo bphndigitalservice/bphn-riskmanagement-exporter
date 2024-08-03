@@ -6,6 +6,9 @@ type Report struct {
 	SheetPenetapanTujuan    []DataPenetapanTujuan
 	SheetIdentifikasiRisiko []DataIdentifikasiRisiko
 	SheetAnalisisRisiko     DataAnalisisRisiko
+	SheetEvaluasiRisiko     DataEvaluasiRisiko
+	SheetPenangananRisiko   DataPenangananRisiko
+	SheetPemantauanRisiko   DataPemantauanRisiko
 	Period                  uint64
 }
 
@@ -25,6 +28,10 @@ type DataIdentifikasiRisiko struct {
 type DataAnalisisRisiko struct {
 	Risks []repository.Risk
 }
+
+type DataEvaluasiRisiko DataAnalisisRisiko
+type DataPenangananRisiko DataAnalisisRisiko
+type DataPemantauanRisiko DataAnalisisRisiko
 
 type RiskLevel struct {
 	Color string

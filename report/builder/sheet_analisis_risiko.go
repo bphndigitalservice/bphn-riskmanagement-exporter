@@ -163,25 +163,31 @@ func (ex *ExcelBuilder) fillAnalisisRisikoData(f *excelize.File, report Report) 
 
 		f.SetCellStyle(SheetAnalisisRisiko, ProfilRisikoCell, ProfilRisikoCell, style)
 
-		f.SetColWidth(SheetAnalisisRisiko, "B", "I", 45)
+		f.SetRowHeight(SheetAnalisisRisiko, startRowNum, 35)
 
 		startRowNum++
 	}
+	f.SetColWidth(SheetAnalisisRisiko, "B", "I", 25)
+	ex.signPlaceholder(f, SheetAnalisisRisiko, startRowNum+3, "F")
 }
 
 func (ex *ExcelBuilder) riskLevel(estimatedRiskValue int, riskMapValue int) RiskLevel {
 	result := estimatedRiskValue * riskMapValue
+
 	if result >= 20 && result <= 25 {
+		// merah (sangat tinggi)
 		return RiskLevel{
 			Value: result,
 			Color: "FF0000",
 		}
 	} else if result >= 16 && result <= 19 {
+		// orange (tinggi)
 		return RiskLevel{
 			Value: result,
 			Color: "f78c00",
 		}
 	} else if result >= 12 && result <= 15 {
+		// kuning (sedang)
 		return RiskLevel{
 			Value: result,
 			Color: "eff700",
@@ -192,14 +198,16 @@ func (ex *ExcelBuilder) riskLevel(estimatedRiskValue int, riskMapValue int) Risk
 			Color: "0000f7",
 		}
 	} else if result >= 1 && result <= 5 {
+		// rendah (hijau)
 		return RiskLevel{
 			Value: result,
 			Color: "49b1ff",
 		}
 	}
 
+	// biru < 0
 	return RiskLevel{
 		Value: result,
-		Color: "FFFFFF",
+		Color: "49b1ff",
 	}
 }

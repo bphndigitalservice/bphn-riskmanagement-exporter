@@ -256,5 +256,5 @@ func (ex *ExcelBuilder) fillIdentifikasiRisikoData(f *excelize.File, report Repo
 		log.Fatal(err)
 	}
 
-	ex.signPlaceholder(f, SheetIdentifikasirisiko, startRowNum+3)
+	ex.signPlaceholder(f, SheetIdentifikasirisiko, startRowNum+3, "K")
 }

@@ -52,10 +52,28 @@ func (ex *ExcelBuilder) Export(year int) (*excelize.File, error) {
 		log.Printf("Error %v", err.Error())
 	}
 
+	dataEvaluasiRisiko, err := ex.getDataEvaluasiRisiko(year)
+	if err != nil {
+		log.Printf("Error %v", err.Error())
+	}
+
+	dataPenangananRisiko, err := ex.getDataPenangananRisiko(year)
+	if err != nil {
+		log.Printf("Error %v", err.Error())
+	}
+
+	dataPemantauanRisiko, err := ex.getDataMonitoringRisiko(year)
+	if err != nil {
+		log.Printf("Error %v", err.Error())
+	}
+
 	builder := Report{
 		SheetPenetapanTujuan:    dataPenetapanTujuan,
 		SheetIdentifikasiRisiko: dataIdentifikasiRisiko,
 		SheetAnalisisRisiko:     dataAnalisisRisiko,
+		SheetEvaluasiRisiko:     dataEvaluasiRisiko,
+		SheetPenangananRisiko:   dataPenangananRisiko,
+		SheetPemantauanRisiko:   dataPemantauanRisiko,
 		Period:                  uint64(year),
 	}
 
@@ -78,6 +96,21 @@ func (ex *ExcelBuilder) Export(year int) (*excelize.File, error) {
 	ex.createAnalisisRisikoHeader(f, year)
 	ex.createAnalisisRisikoTable(f)
 	ex.fillAnalisisRisikoData(f, builder)
+
+	// 5. Evaluasi Risiko
+	ex.createEvaluasiRisikoHeader(f, year)
+	ex.createEvaluasiRisikoTable(f)
+	ex.fillEvaluasiRisikoData(f, builder)
+
+	// 6. Penanganan Risiko
+	ex.createPenangananRisikoHeader(f, year)
+	ex.createPenangananRisikoTable(f)
+	ex.fillPenangananRisikoData(f, builder)
+
+	// 7. Pemantauan Risiko
+	ex.createPemantauanRisikoHeader(f, year)
+	ex.createPemantauanRisikoTable(f)
+	ex.fillPemantauanRisikoData(f, builder)
 
 	// Save spreadsheet by the given path.
 	if err := f.SaveAs("Manajemen Risiko_Export.xlsx"); err != nil {
