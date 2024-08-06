@@ -171,7 +171,7 @@ func (ex *ExcelBuilder) fillIdentifikasiRisikoData(f *excelize.File, report Repo
 			for _, risk := range data.Risks[problem.ID] {
 				// Risk Statement Cell
 				RiskStatementCell := fmt.Sprintf("D%d", RiskStartRowNum)
-				f.SetCellValue(SheetIdentifikasirisiko, RiskStatementCell, fmt.Sprintf("Risk statement %s: %d", risk.RisikoPernyataan, RiskStartRowNum))
+				f.SetCellValue(SheetIdentifikasirisiko, RiskStatementCell, risk.RisikoPernyataan)
 
 				// Risk Owner Cell
 				RiskOwnerCell := fmt.Sprintf("E%d", RiskStartRowNum)
