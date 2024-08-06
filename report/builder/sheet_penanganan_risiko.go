@@ -46,8 +46,8 @@ func (ex *ExcelBuilder) createPenangananRisikoHeader(f *excelize.File, period in
 		},
 	})
 
-	f.SetCellStyle(SheetPenangananRisiko, "A2", "H2", sheetHeaderStyle)
-	f.SetCellStyle(SheetHeader_PenangananRisiko, "A4", "C5", style)
+	f.SetCellStyle(SheetPenangananRisiko, "A2", "J2", sheetHeaderStyle)
+	f.SetCellStyle(SheetPenangananRisiko, "A4", "C5", style)
 	f.SetCellValue(SheetPenangananRisiko, "A4", "Unit Pemilik Risiko")
 	f.SetCellValue(SheetPenangananRisiko, "C4", ": BADAN PEMBINAAN HUKUM NASIONAL")
 	f.SetCellValue(SheetPenangananRisiko, "A5", "Periode Penerapan")

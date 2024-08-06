@@ -226,12 +226,12 @@ where manajemen_risiko.id_permasalahan = ?`
 			opsiPenanganan           sql.NullString
 			kegiatanPengendalian     sql.NullString
 			outputIndikator          sql.NullString
-			targetIndikator          sql.NullString
+			targetIndikator          sql.NullFloat64
 			jadwal                   sql.NullString
 			penanggungJawab          sql.NullString
 			cadanganRisiko           sql.NullString
-			realisasiPengendalian    sql.NullString
-			realisasiRisiko          sql.NullString
+			realisasiPengendalian    sql.NullFloat64
+			realisasiRisiko          sql.NullFloat64
 			risikoResidu             sql.NullString
 			progress                 sql.NullString
 			tglPost                  sql.NullTime
@@ -352,7 +352,7 @@ where manajemen_risiko.id_permasalahan = ?`
 			mr.OutputIndikator = outputIndikator.String
 		}
 		if targetIndikator.Valid {
-			mr.TargetIndikator = targetIndikator.String
+			mr.TargetIndikator = targetIndikator.Float64
 		}
 		if jadwal.Valid {
 			mr.Jadwal = jadwal.String
@@ -364,10 +364,10 @@ where manajemen_risiko.id_permasalahan = ?`
 			mr.CadanganRisiko = cadanganRisiko.String
 		}
 		if realisasiPengendalian.Valid {
-			mr.RealisasiPengendalian = realisasiPengendalian.String
+			mr.RealisasiPengendalian = realisasiPengendalian.Float64
 		}
 		if realisasiRisiko.Valid {
-			mr.RealisasiRisiko = realisasiRisiko.String
+			mr.RealisasiRisiko = realisasiRisiko.Float64
 		}
 		if risikoResidu.Valid {
 			mr.RisikoResidu = risikoResidu.String
@@ -439,12 +439,12 @@ func (receiver *riskRepository) GetRiskAnalysisByYear(year int) ([]Risk, error) 
 			opsiPenanganan           sql.NullString
 			kegiatanPengendalian     sql.NullString
 			outputIndikator          sql.NullString
-			targetIndikator          sql.NullString
+			targetIndikator          sql.NullFloat64
 			jadwal                   sql.NullString
 			penanggungJawab          sql.NullString
 			cadanganRisiko           sql.NullString
-			realisasiPengendalian    sql.NullString
-			realisasiRisiko          sql.NullString
+			realisasiPengendalian    sql.NullFloat64
+			realisasiRisiko          sql.NullFloat64
 			risikoResidu             sql.NullString
 			progress                 sql.NullString
 			tglPost                  sql.NullTime
@@ -563,7 +563,7 @@ func (receiver *riskRepository) GetRiskAnalysisByYear(year int) ([]Risk, error) 
 			mr.OutputIndikator = outputIndikator.String
 		}
 		if targetIndikator.Valid {
-			mr.TargetIndikator = targetIndikator.String
+			mr.TargetIndikator = targetIndikator.Float64
 		}
 		if jadwal.Valid {
 			mr.Jadwal = jadwal.String
@@ -575,10 +575,10 @@ func (receiver *riskRepository) GetRiskAnalysisByYear(year int) ([]Risk, error) 
 			mr.CadanganRisiko = cadanganRisiko.String
 		}
 		if realisasiPengendalian.Valid {
-			mr.RealisasiPengendalian = realisasiPengendalian.String
+			mr.RealisasiPengendalian = realisasiPengendalian.Float64
 		}
 		if realisasiRisiko.Valid {
-			mr.RealisasiRisiko = realisasiRisiko.String
+			mr.RealisasiRisiko = realisasiRisiko.Float64
 		}
 		if risikoResidu.Valid {
 			mr.RisikoResidu = risikoResidu.String
@@ -647,12 +647,12 @@ func (receiver *riskRepository) GetRiskEvaluationByYear(year int) ([]Risk, error
 			opsiPenanganan           sql.NullString
 			kegiatanPengendalian     sql.NullString
 			outputIndikator          sql.NullString
-			targetIndikator          sql.NullString
+			targetIndikator          sql.NullFloat64
 			jadwal                   sql.NullString
 			penanggungJawab          sql.NullString
 			cadanganRisiko           sql.NullString
-			realisasiPengendalian    sql.NullString
-			realisasiRisiko          sql.NullString
+			realisasiPengendalian    sql.NullFloat64
+			realisasiRisiko          sql.NullFloat64
 			risikoResidu             sql.NullString
 			progress                 sql.NullString
 			tglPost                  sql.NullTime
@@ -771,7 +771,7 @@ func (receiver *riskRepository) GetRiskEvaluationByYear(year int) ([]Risk, error
 			mr.OutputIndikator = outputIndikator.String
 		}
 		if targetIndikator.Valid {
-			mr.TargetIndikator = targetIndikator.String
+			mr.TargetIndikator = targetIndikator.Float64
 		}
 		if jadwal.Valid {
 			mr.Jadwal = jadwal.String
@@ -783,10 +783,10 @@ func (receiver *riskRepository) GetRiskEvaluationByYear(year int) ([]Risk, error
 			mr.CadanganRisiko = cadanganRisiko.String
 		}
 		if realisasiPengendalian.Valid {
-			mr.RealisasiPengendalian = realisasiPengendalian.String
+			mr.RealisasiPengendalian = realisasiPengendalian.Float64
 		}
 		if realisasiRisiko.Valid {
-			mr.RealisasiRisiko = realisasiRisiko.String
+			mr.RealisasiRisiko = realisasiRisiko.Float64
 		}
 		if risikoResidu.Valid {
 			mr.RisikoResidu = risikoResidu.String
@@ -855,12 +855,12 @@ func (receiver *riskRepository) GetRiskTreatmentByYear(year int) ([]Risk, error)
 			opsiPenanganan           sql.NullString
 			kegiatanPengendalian     sql.NullString
 			outputIndikator          sql.NullString
-			targetIndikator          sql.NullString
+			targetIndikator          sql.NullFloat64
 			jadwal                   sql.NullString
 			penanggungJawab          sql.NullString
 			cadanganRisiko           sql.NullString
-			realisasiPengendalian    sql.NullString
-			realisasiRisiko          sql.NullString
+			realisasiPengendalian    sql.NullFloat64
+			realisasiRisiko          sql.NullFloat64
 			risikoResidu             sql.NullString
 			progress                 sql.NullString
 			tglPost                  sql.NullTime
@@ -979,7 +979,7 @@ func (receiver *riskRepository) GetRiskTreatmentByYear(year int) ([]Risk, error)
 			mr.OutputIndikator = outputIndikator.String
 		}
 		if targetIndikator.Valid {
-			mr.TargetIndikator = targetIndikator.String
+			mr.TargetIndikator = targetIndikator.Float64
 		}
 		if jadwal.Valid {
 			mr.Jadwal = jadwal.String
@@ -991,10 +991,10 @@ func (receiver *riskRepository) GetRiskTreatmentByYear(year int) ([]Risk, error)
 			mr.CadanganRisiko = cadanganRisiko.String
 		}
 		if realisasiPengendalian.Valid {
-			mr.RealisasiPengendalian = realisasiPengendalian.String
+			mr.RealisasiPengendalian = realisasiPengendalian.Float64
 		}
 		if realisasiRisiko.Valid {
-			mr.RealisasiRisiko = realisasiRisiko.String
+			mr.RealisasiRisiko = realisasiRisiko.Float64
 		}
 		if risikoResidu.Valid {
 			mr.RisikoResidu = risikoResidu.String
@@ -1063,12 +1063,12 @@ func (receiver *riskRepository) GetRiskMonitoringByYear(year int) ([]Risk, error
 			opsiPenanganan           sql.NullString
 			kegiatanPengendalian     sql.NullString
 			outputIndikator          sql.NullString
-			targetIndikator          sql.NullString
+			targetIndikator          sql.NullFloat64
 			jadwal                   sql.NullString
 			penanggungJawab          sql.NullString
 			cadanganRisiko           sql.NullString
-			realisasiPengendalian    sql.NullString
-			realisasiRisiko          sql.NullString
+			realisasiPengendalian    sql.NullFloat64
+			realisasiRisiko          sql.NullFloat64
 			risikoResidu             sql.NullString
 			progress                 sql.NullString
 			tglPost                  sql.NullTime
@@ -1187,7 +1187,7 @@ func (receiver *riskRepository) GetRiskMonitoringByYear(year int) ([]Risk, error
 			mr.OutputIndikator = outputIndikator.String
 		}
 		if targetIndikator.Valid {
-			mr.TargetIndikator = targetIndikator.String
+			mr.TargetIndikator = targetIndikator.Float64
 		}
 		if jadwal.Valid {
 			mr.Jadwal = jadwal.String
@@ -1199,10 +1199,10 @@ func (receiver *riskRepository) GetRiskMonitoringByYear(year int) ([]Risk, error
 			mr.CadanganRisiko = cadanganRisiko.String
 		}
 		if realisasiPengendalian.Valid {
-			mr.RealisasiPengendalian = realisasiPengendalian.String
+			mr.RealisasiPengendalian = realisasiPengendalian.Float64
 		}
 		if realisasiRisiko.Valid {
-			mr.RealisasiRisiko = realisasiRisiko.String
+			mr.RealisasiRisiko = realisasiRisiko.Float64
 		}
 		if risikoResidu.Valid {
 			mr.RisikoResidu = risikoResidu.String

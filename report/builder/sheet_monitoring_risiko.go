@@ -3,6 +3,7 @@ package builder
 import (
 	"fmt"
 	"github.com/xuri/excelize/v2"
+	"time"
 )
 
 func (ex *ExcelBuilder) getDataMonitoringRisiko(year int) (DataPemantauanRisiko, error) {
@@ -97,7 +98,7 @@ func (ex *ExcelBuilder) createPemantauanRisikoTable(f *excelize.File) {
 	f.SetCellValue(SheetPemantauanRisiko, "K7", "Residu Risiko")
 	f.MergeCell(SheetPemantauanRisiko, "K7", "K8")
 
-	f.SetCellValue(SheetPemantauanRisiko, "L7", "Progres sampai dengan semester <replace with your semester>")
+	f.SetCellValue(SheetPemantauanRisiko, "L7", fmt.Sprintf("Progres sampai dengan %s", ex.semester()))
 	f.MergeCell(SheetPemantauanRisiko, "L7", "L8")
 
 	cells := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"}
@@ -127,33 +128,22 @@ func (ex *ExcelBuilder) fillPemantauanRisikoData(f *excelize.File, report Report
 		f.SetCellValue(SheetPemantauanRisiko, NoCell, i+1)
 		f.SetColWidth(SheetPemantauanRisiko, "A", "A", 5)
 
-		// Indikasi Indikator Cell
-		IndikasiIndikatorCell := fmt.Sprintf("B%d", startRowNum)
-		f.SetCellValue(SheetPemantauanRisiko, IndikasiIndikatorCell, risk.IndikasiIndikator)
-
-		// Batas Aman Cell
-		BatasAmanCell := fmt.Sprintf("C%d", startRowNum)
-		f.SetCellValue(SheetPemantauanRisiko, BatasAmanCell, risk.BatasAmanIndikator)
-
-		// Opsi Penanganan Cell
-		OpsiPenangananCell := fmt.Sprintf("D%d", startRowNum)
-		f.SetCellValue(SheetPemantauanRisiko, OpsiPenangananCell, risk.OpsiPenanganan)
-
 		// Kegiatan Pengendalian Cell
-		KegiatanPendendalianCell := fmt.Sprintf("E%d", startRowNum)
+		KegiatanPendendalianCell := fmt.Sprintf("B%d", startRowNum)
 		f.SetCellValue(SheetPemantauanRisiko, KegiatanPendendalianCell, risk.IndikasiIndikator)
 
-		OutputIndikatorCell := fmt.Sprintf("F%d", startRowNum)
+		OutputIndikatorCell := fmt.Sprintf("C%d", startRowNum)
 		f.SetCellValue(SheetPemantauanRisiko, OutputIndikatorCell, risk.OutputIndikator)
 
-		TargetIndikatorCell := fmt.Sprintf("G%d", startRowNum)
+		TargetIndikatorCell := fmt.Sprintf("D%d", startRowNum)
 		f.SetCellValue(SheetPemantauanRisiko, TargetIndikatorCell, risk.TargetIndikator)
 
-		JadwalCell := fmt.Sprintf("H%d", startRowNum)
-		f.SetCellValue(SheetPemantauanRisiko, JadwalCell, risk.Jadwal)
+		RealisasiPengendalianCell := fmt.Sprintf("E%d", startRowNum)
+		f.SetCellValue(SheetPemantauanRisiko, RealisasiPengendalianCell, risk.Jadwal)
 
-		PenanggungJawabCell := fmt.Sprintf("I%d", startRowNum)
-		f.SetCellValue(SheetPemantauanRisiko, PenanggungJawabCell, risk.PenanggungJawab)
+		HasilPengendalianCell := fmt.Sprintf("F%d", startRowNum)
+		HasilPengendalianCellValue := (risk.RealisasiPengendalian * risk.TargetIndikator) / 100
+		f.SetCellValue(SheetPemantauanRisiko, HasilPengendalianCell, HasilPengendalianCellValue)
 
 		CadanganRisikoCell := fmt.Sprintf("J%d", startRowNum)
 		f.SetCellValue(SheetPemantauanRisiko, CadanganRisikoCell, risk.PenanggungJawab)
@@ -163,4 +153,17 @@ func (ex *ExcelBuilder) fillPemantauanRisikoData(f *excelize.File, report Report
 		startRowNum++
 	}
 	ex.signPlaceholder(f, SheetPemantauanRisiko, startRowNum+3, "H")
+}
+
+func (ex *ExcelBuilder) semester() string {
+	date := time.Now()
+	if date.Month() >= 1 && date.Month() <= 6 {
+		return "Semester 1"
+	}
+
+	if date.Month() >= 7 && date.Month() <= 12 {
+		return "Semester 2"
+	}
+
+	return "Semester <value here>"
 }

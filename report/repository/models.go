@@ -62,12 +62,12 @@ type Risk struct {
 	OpsiPenanganan           string    `json:"opsi_penanganan,omitempty"`
 	KegiatanPengendalian     string    `json:"kegiatan_pengendalian,omitempty"`
 	OutputIndikator          string    `json:"output_indikator,omitempty"`
-	TargetIndikator          string    `json:"target_indikator,omitempty"`
+	TargetIndikator          float64   `json:"target_indikator,omitempty"`
 	Jadwal                   string    `json:"jadwal,omitempty"`
 	PenanggungJawab          string    `json:"penanggung_jawab,omitempty"`
 	CadanganRisiko           string    `json:"cadangan_risiko,omitempty"`
-	RealisasiPengendalian    string    `json:"realisasi_pengendalian,omitempty"`
-	RealisasiRisiko          string    `json:"realisasi_risiko,omitempty"`
+	RealisasiPengendalian    float64   `json:"realisasi_pengendalian,omitempty"`
+	RealisasiRisiko          float64   `json:"realisasi_risiko,omitempty"`
 	RisikoResidu             string    `json:"risiko_residu,omitempty"`
 	Progress                 string    `json:"progress,omitempty"`
 	TglPost                  time.Time `json:"tgl_post,omitempty"`

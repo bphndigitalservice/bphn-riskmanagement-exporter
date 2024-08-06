@@ -82,8 +82,8 @@ func (ex *ExcelBuilder) createPenetapanTujuanHeader(f *excelize.File, period int
 		},
 	})
 
-	f.SetCellStyle(SheetPenetapantujuan, "A2", "F2", sheetHeaderStyle)
-	f.SetCellStyle(SheetHeaderPenetapanTujuan, "A4", "C5", style)
+	f.SetCellStyle(SheetPenetapantujuan, "A2", "L2", sheetHeaderStyle)
+	f.SetCellStyle(SheetPenetapantujuan, "A4", "C5", style)
 	f.SetCellValue(SheetPenetapantujuan, "A4", "Unit Pemilik Risiko")
 	f.SetCellValue(SheetPenetapantujuan, "C4", ": BADAN PEMBINAAN HUKUM NASIONAL")
 	f.SetCellValue(SheetPenetapantujuan, "A5", "Periode Penerapan")

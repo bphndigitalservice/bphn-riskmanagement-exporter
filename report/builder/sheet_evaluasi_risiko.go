@@ -47,7 +47,7 @@ func (ex *ExcelBuilder) createEvaluasiRisikoHeader(f *excelize.File, period int)
 	})
 
 	f.SetCellStyle(SheetEvaluasiRisiko, "A2", "H2", sheetHeaderStyle)
-	f.SetCellStyle(SheetHeader_EvaluasiRisiko, "A4", "C5", style)
+	f.SetCellStyle(SheetEvaluasiRisiko, "A4", "C5", style)
 	f.SetCellValue(SheetEvaluasiRisiko, "A4", "Unit Pemilik Risiko")
 	f.SetCellValue(SheetEvaluasiRisiko, "C4", ": BADAN PEMBINAAN HUKUM NASIONAL")
 	f.SetCellValue(SheetEvaluasiRisiko, "A5", "Periode Penerapan")
