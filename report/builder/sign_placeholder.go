@@ -24,5 +24,5 @@ func (ex *ExcelBuilder) signPlaceholder(f *excelize.File, sheet string, rowNumbe
 	f.SetCellValue(sheet, signerNameCell, name)
 	// Employee ID cell
 	signerIDCell := fmt.Sprintf("%s%d", col, rowNumberStart+7)
-	f.SetCellValue(sheet, signerIDCell, fmt.Sprintf("NIP.%s", os.Getenv("SING_NIP")))
+	f.SetCellValue(sheet, signerIDCell, fmt.Sprintf("NIP.%s", os.Getenv("SIGN_NIP")))
 }

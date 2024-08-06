@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    restart: "unless-stopped"
+    ports:
+      - "8443:8443"
+    depends_on:
+      - db
+    volumes:
+      - upload_data:/var/tmp
+    environment:
+      - PORT=8443
+      - DATABASE_URL=
+      - SIGN_ROLE=
+      - SIGN_NAME=postgres://postgres:mysecretpassword@db:5432/dbname?sslmode=disable
+      - SIGN_NIP=
