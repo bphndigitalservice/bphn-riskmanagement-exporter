@@ -45,7 +45,19 @@ func (receiver *riskRepository) GetIndicatorsByObjective(id uint64) ([]Indicator
 }
 
 func (receiver *riskRepository) GetProblemsByIndicator(id uint64) ([]Problem, error) {
-	rows, err := receiver.db.Query("SELECT id_permasalahan,id_indikator,judul_permasalahan,tahun,tgl_post,id_user_post,id_pusat FROM master_permasalahan WHERE id_indikator = ? ORDER BY id_permasalahan", id)
+	query := `SELECT id_permasalahan,
+       id_indikator,
+       judul_permasalahan,
+       tahun,
+       tgl_post,
+       id_user_post,
+       master_permasalahan.id_pusat,
+       pusat.nickname
+FROM master_permasalahan
+         left join pusat on pusat.id_pusat = master_permasalahan.id_pusat
+WHERE id_indikator = ?
+ORDER BY id_permasalahan;`
+	rows, err := receiver.db.Query(query, id)
 
 	if err != nil {
 		return nil, err
@@ -56,7 +68,7 @@ func (receiver *riskRepository) GetProblemsByIndicator(id uint64) ([]Problem, er
 
 	for rows.Next() {
 		var problem Problem
-		if err := rows.Scan(&problem.ID, &problem.IndicatorID, &problem.ProblemDefinition, &problem.Year, &problem.CreatedAt, &problem.OwnerID, &problem.OwnerDepartmentID); err != nil {
+		if err := rows.Scan(&problem.ID, &problem.IndicatorID, &problem.ProblemDefinition, &problem.Year, &problem.CreatedAt, &problem.OwnerID, &problem.OwnerDepartmentID, &problem.OwnerNickname); err != nil {
 			return nil, err
 		}
 		problems = append(problems, problem)

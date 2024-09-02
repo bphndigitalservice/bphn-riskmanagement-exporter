@@ -163,6 +163,8 @@ func (ex *ExcelBuilder) fillPenetapanTujuanData(f *excelize.File, report Report)
 				for _, problem := range data.Problems[indicator.ID] {
 					ProblemCell := fmt.Sprintf("E%d", ProblemsCellRowNum)
 					f.SetCellValue(SheetPenetapantujuan, ProblemCell, problem.ProblemDefinition)
+					UPRCell := fmt.Sprintf("F%d", ProblemsCellRowNum)
+					f.SetCellValue(SheetPenetapantujuan, UPRCell, problem.OwnerNickname)
 					ProblemsCellRowNum++
 					problemsCount++
 

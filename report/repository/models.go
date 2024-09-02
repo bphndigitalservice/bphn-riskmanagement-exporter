@@ -34,6 +34,7 @@ type Problem struct {
 	CreatedBy         uint64    `json:"created_by"`
 	OwnerID           uint64    `json:"owner_id"`
 	OwnerDepartmentID uint64    `json:"owner_department_id"`
+	OwnerNickname     string    `json:"owner_nickname"`
 }
 
 type Risk struct {
